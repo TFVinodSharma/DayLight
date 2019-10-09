@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.bakkenbaeck.sol">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-feature android:name="android.software.live_wallpaper" />
+
+    <application
+        android:name=".BaseApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/daylight_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".ui.SunActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:resizeableActivity="true"/>
+
+        <activity
+            android:name=".ui.InfoActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:resizeableActivity="true"/>
+        
+        <activity
+            android:name=".ui.StartActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:resizeableActivity="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".service.BootReceiver"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".service.AlarmReceiver"/>
+
+        <service
+            android:name=".service.SunsetService"
+            android:exported="false"/>
+
+        <service
+            android:name=".wallpaper.LiveWallpaper"
+            android:enabled="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper_info"/>
+        </service>
+
+        <receiver android:name=".widget.DashboardWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/dashboard_widget_info"/>
+        </receiver>
+    </application>
+
+</manifest>
